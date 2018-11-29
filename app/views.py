@@ -16,11 +16,30 @@ class Add(View):
 
 class Double(View):
     def get(self, request):
-        number = request.GET.get('your_number')
+        number = request.GET.get('your_num')
 
         if number is not None:
-            your_num = float(number)
-            answer = your_num * 2
-            return render(request, 'app/double.html', {'answer': answer})
+            try:
+                your_num = float(number)
+                answer = your_num * 2
+                return render(request, 'app/double.html', {'answer': answer})
+            except ValueError:
+                return render(request, 'app/double.html')
         else:
             return render(request, 'app/double.html')
+
+
+class Multiple(View):
+    def get(self, request):
+        first_number = request.GET.get('one_number')
+        second_number = request.GET.get('two_number')
+        third_number = request.GET.get('three_number')
+
+        if first_number is not None and second_number is not None and third_number is not None:
+            first = float(first_number)
+            second = float(second_number)
+            third = float(third_number)
+            answer = first * second * third
+            return render(request, 'app/multiple.html', {'answer': answer})
+        else:
+            return render(request, 'app/multiple.html')
