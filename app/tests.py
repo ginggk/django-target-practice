@@ -158,4 +158,54 @@ class TestDoubleCanDoubleRealNumber(SimpleTestCase):
         response = self.client.get(
             path=reverse('double'), data={'your_num': '-4'})
 
-        self.assertEqual(response.conext['answer'], -8)
+        self.assertEqual(response.context['answer'], -8)
+
+    def test_number_none(self):
+        response = self.client.get(path=reverse('double'), data={})
+
+        self.assertTemplateUsed(response, 'app/double.html')
+        self.assertNotIn('answer', response.context)
+
+    def test_double_foo(self):
+        response = self.client.get(
+            path=reverse('double'), data={'your_num': 'foo'})
+
+        self.assertTemplateUsed(response, 'app/double.html')
+        self.assertNotIn('answer', response.context)
+
+
+class TestMultipleCanMultiplyThreeNumbers(SimpleTestCase):
+    """If you GET multiple with an int or float, it should 
+    render multiple.html with the product of three numbers
+    as 'answer' in the context."""
+
+    def test_multiple_three(self):
+        response = self.client.get(
+            path=reverse('multiple'),
+            data={
+                'first': '3',
+                'second': '3',
+                'third': '3'
+            })
+
+        self.assertEqual(response.context['answer'], 27)
+
+    def test_multiple_decimal(self):
+        response = self.client.get(
+            path=reverse('multiple'),
+            data={
+                'first': '27.8',
+                'second': '33.4',
+                'third': '62.0'
+            })
+
+        self.assertEqual(response.context['answer'], 57568.24)
+
+    def test_multiple_negative(self):
+        response = self.client.get(
+            path=reverse('multiple'),
+            data={
+                'first': '-11',
+                'second': '-2',
+                'third': '-8'
+            })
