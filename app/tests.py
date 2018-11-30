@@ -183,9 +183,9 @@ class TestMultipleCanMultiplyThreeNumbers(SimpleTestCase):
         response = self.client.get(
             path=reverse('multiple'),
             data={
-                'first': '3',
-                'second': '3',
-                'third': '3'
+                'first_number': '3',
+                'second_number': '3',
+                'third_number': '3'
             })
 
         self.assertEqual(response.context['answer'], 27)
@@ -194,9 +194,9 @@ class TestMultipleCanMultiplyThreeNumbers(SimpleTestCase):
         response = self.client.get(
             path=reverse('multiple'),
             data={
-                'first': '27.8',
-                'second': '33.4',
-                'third': '62.0'
+                'first_number': '27.8',
+                'second_number': '33.4',
+                'third_number': '62.0'
             })
 
         self.assertEqual(response.context['answer'], 57568.24)
@@ -205,7 +205,119 @@ class TestMultipleCanMultiplyThreeNumbers(SimpleTestCase):
         response = self.client.get(
             path=reverse('multiple'),
             data={
-                'first': '-11',
-                'second': '-2',
-                'third': '-8'
+                'first_number': '-11',
+                'second_number': '-2',
+                'third_number': '-8'
             })
+
+        self.assertEqual(response.context['answer'], -176.0)
+
+    def test_multiply_foo(self):
+        response = self.client.get(
+            path=reverse('multiple'),
+            data={
+                'first_number': 'foo',
+                'second_number': 'foo',
+                'third_number': 'foo'
+            })
+
+        self.assertTemplateUsed(response, 'app/multiple.html')
+        self.assertNotIn('answer', response.context)
+
+
+class TestEarningsCanAdd(SimpleTestCase):
+    """If you GET earnings with an int or float, it should
+    render earnings.html with the three numbers of tickets 
+    sold multiplied by the appropriate number and added 
+    together.""" #1.15 2.12 3.9
+
+    def test_low_earnings(self):
+        response = self.client.get(
+            path=reverse('earnings'),
+            data={
+                'first_number': '2',  #30
+                'second_number': '1',  #12
+                'third_number': '3'  #27
+            })
+
+        self.assertEqual(response.context['answer'], 69)
+
+    def test_decimal_earnings(self):
+        response = self.client.get(
+            path=reverse('earnings'),
+            data={
+                'first_number': '2.2',  #33
+                'second_number': '3.3',  #39.6
+                'third_number': '4.4'  #39.6
+            })
+
+        self.assertEqual(response.context['answer'], 112.19999999999999)
+
+    def test_string_earnings(self):
+        response = self.client.get(
+            path=reverse('earnings'),
+            data={
+                'first_number': 'me',
+                'second_number': 'yes',
+                'third_number': 'today'
+            })
+
+        self.assertTemplateUsed(response, 'app/earnings.html')
+        self.assertNotIn('answer', response.context)
+
+
+class TestTrueOrFalse(SimpleTestCase):
+    """If you GET both with either True or False, it should
+    render both.html with True or False. It should only return 
+    True when both are True."""
+
+    def test_true(self):
+        response = self.client.get(
+            path=reverse('both'),
+            data={
+                'first_answer': 'True',
+                'second_answer': 'True'
+            })
+
+        self.assertEqual(response.context['answer'], "True")
+
+    def test_false(self):
+        response = self.client.get(
+            path=reverse('both'),
+            data={
+                'first_answer': 'False',
+                'second_answer': 'False'
+            })
+
+        self.assertEqual(response.context['answer'], "False")
+
+    def test_second_false(self):
+        response = self.client.get(
+            path=reverse('both'),
+            data={
+                'first_answer': 'False',
+                'second_answer': 'True'
+            })
+
+        self.assertEqual(response.context['answer'], "False")
+
+    def test_string_false(self):
+        response = self.client.get(
+            path=reverse('both'),
+            data={
+                'first_answer': 'me',
+                'second_answer': 'today'
+            })
+
+        self.assertTemplateUsed(response, 'app/both.html')
+        self.assertNotIn('answer', response.context)
+
+    def test_false_true(self):
+        response = self.client.get(
+            path=reverse('both'),
+            data={
+                'first_answer': 'True',
+                'second_answer': 'False'
+            })
+
+        self.assertEqual(response.context['answer'], "False")
