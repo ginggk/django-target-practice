@@ -1,0 +1,18 @@
+{% extends 'app/base.html' %}
+{% block body %}
+
+
+<form action="{% url 'walkordrive' %}" method="POST" class="">
+    {% csrf_token %}
+    {{ walkordriveForm }}
+    <div class="form-group">
+        <button type="submit" class="btn btn-info">Walk or Drive!</button>
+    </div>
+    {% if answer is not None %}
+    <h3> Should you walk or Drive? </h3>
+    <h3>{{ answer }}</h3>
+    {% endif %}
+</form>
+
+
+{%endblock body %}

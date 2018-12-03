@@ -1,17 +1,15 @@
 {% extends 'app/base.html' %}
 {% block body %}
-
-<div class="container pt-3">
-    <form action="{% url 'multiple' %}" method="POST" class="">
+<div class="container pt-4">
+    <form action="{% url 'points' %}" method="POST" class="">
         {% csrf_token %}
-        {{ multipleForm }}
+        {{ pointForm }}
         <div class="form-group">
-            <button type="submit" class="btn btn-info">Multiply!</button>
+            <button type="submit" class="btn btn-info">Get Points!</button>
         </div>
         {% if answer is not None %}
         <h3>Answer: {{ answer }}</h3>
         {% endif %}
     </form>
 </div>
-
 {% endblock body %}

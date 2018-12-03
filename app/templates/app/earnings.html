@@ -1,26 +1,10 @@
 {% extends 'app/base.html' %}
 {% block body %}
 
-<div class="container">
-    <form action="{% url 'earnings' %}" method="GET" class="">
-
-        <div class="form-group">
-            <label>Your First Number..
-                <input type="number" name="first_number" class="form-control" placeholder="First Number">
-            </label>
-        </div>
-        <div class="form-group">
-            <label>
-                Your Second Number..
-                <input type="number" name="second_number" class="form-control" placeholder="Second Number">
-            </label>
-        </div>
-        <div class="form-group">
-            <label>
-                Your Third Number..
-                <input type="number" name="third_number" class="form-control" placeholder="Third Number">
-            </label>
-        </div>
+<div class="container pt-3">
+    <form action="{% url 'earnings' %}" method="POST" class="">
+        {% csrf_token %}
+        {{ earningsForm }}
         <div class="form-group">
             <button type="submit" class="btn btn-info">Get Earnings!</button>
         </div>

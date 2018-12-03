@@ -1,17 +1,15 @@
 {% extends 'app/base.html' %}
 {% block body %}
 
-
-<form action="{% url 'double' %}" method="POST" class="">
+<form action="{% url 'populated' %}" method="POST" class="">
     {% csrf_token %}
-    {{ doubleForm }}
+    {{ populatedForm }}
     <div class="form-group">
-        <button type="submit" class="btn btn-success">Double!</button>
+        <button type="submit" class="btn btn-info">Densely or Sparsely?</button>
     </div>
     {% if answer is not None %}
     <h3>Answer: {{ answer }}</h3>
     {% endif %}
 </form>
-
 
 {% endblock body %}
